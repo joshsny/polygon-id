@@ -8,6 +8,8 @@ const handler: NextApiHandler = async (req, res) => {
   // Get session ID from request
   const sessionId = req.query.sessionId;
 
+  console.log(req.query, req.body, req.query.sessionId);
+
   // get JWZ token params from the post request
   const raw = req.body.token;
   const tokenStr = raw.toString().trim();
