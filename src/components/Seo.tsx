@@ -8,7 +8,10 @@ const defaultMeta = {
   description:
     'A demo of making verifiable claims with Polygon ID. This is a proof of concept and is not intended for production use.',
   /** Without additional '/' on the end, e.g. https://theodorusclarence.com */
-  url: process.env.NEXT_PUBLIC_VERCEL_URL ?? process.env.NEXT_PUBLIC_BASE_URL,
+  url:
+    process.env.NODE_ENV === 'production'
+      ? 'https://polygon-id.vercel.app'
+      : 'http://localhost:3000',
   type: 'website',
   robots: 'follow, index',
   /**

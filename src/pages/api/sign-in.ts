@@ -2,7 +2,7 @@ import { auth } from '@iden3/js-iden3-auth';
 import { DateTime } from 'luxon';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { initEnvVar } from '@/lib/env';
+import logger from '@/lib/logger';
 import { requestMap } from '@/lib/server/requestMap';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -14,7 +14,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const mode: 'age' | 'country' =
     (req.query.mode as 'age' | 'country') ?? 'age';
   // Audience is verifier id
-  const hostUrl = initEnvVar('BASE_URL');
+  const hostUrl =
+    process.env.NODE_ENV === 'production'
+      ? 'https://polygon-id.vercel.app'
+      : 'http://localhost:3000';
   const sessionId = 1;
   const callbackURL = '/api/callback';
   const audience = '1125GJqgw6YEsKFwj63GY87MMxPL9kwDKxPUiwMLNZ';
@@ -79,6 +82,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Store auth request in map associated with session ID
   requestMap.set(`${sessionId}`, request);
+
+  logger(request);
 
   return res.status(200).json(request);
 }
